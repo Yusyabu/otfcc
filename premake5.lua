@@ -18,7 +18,7 @@ function cbuildoptions()
 	filter {"system:windows", "action:ninja"}
 		buildoptions { '-Wall', '-Wextra', '-Wno-unused-parameter', '-Qunused-arguments' }
 	-- Linux / OSX
-	filter "action:gmake or action:xcode4"
+	filter "action:gmake* or action:xcode4"
 		buildoptions { '-std=gnu11', '-Wall', '-Wno-multichar', '-fPIC' }
 		linkoptions  { '-fPIC' }
 		links "m"
@@ -36,7 +36,7 @@ function externcbuildoptions()
 		buildoptions { '/MP', '-Qunused-arguments', '-Wno-unused-const-variable' }
 	filter {"system:windows", "action:ninja"}
 		buildoptions { '-Wno-unused-parameter', '-Qunused-arguments' }
-	filter "action:gmake or action:xcode4"
+	filter "action:gmake* or action:xcode4"
 		buildoptions { '-std=gnu11', '-Wno-unused-const-variable', '-Wno-shorten-64-to-32', '-fPIC' }
 		linkoptions  { '-fPIC' }
 	filter {"system:not windows", "action:ninja"}
@@ -48,15 +48,15 @@ end
 -- Premake 5 configurations
 workspace "otfcc"
 	configurations { "release", "debug" }
-	
-	platforms { "x64", "x86" }
+
+	platforms { "x64", "x86", "arm" }
 	filter "action:xcode4"
 		platforms { "x64" }
 	filter {}
-	
+
 	location "build"
 	includedirs { "include" }
-	
+
 	defines {
 		'_CARYLL_USE_PRE_SERIALIZED',
 		('MAIN_VER=' .. MAIN_VER),
@@ -67,8 +67,10 @@ workspace "otfcc"
 		architecture "x86"
 	filter "platforms:x64"
 		architecture "x64"
+	filter "platforms:arm"
+		architecture "arm"
 	filter {}
-	
+
 	filter "action:vs2017"
 		location "build/vs"
 		toolset "v141_clang_c2"
@@ -87,12 +89,12 @@ workspace "otfcc"
 		defines { '_CRT_SECURE_NO_WARNINGS', '_CRT_NONSTDC_NO_DEPRECATE' }
 		flags { "StaticRuntime" }
 		includedirs { "dep/polyfill-msvc" }
-	filter "action:gmake"
+	filter "action:gmake*"
 		location "build/gmake"
 	filter "action:xcode4"
 		location "build/xcode"
 	filter {}
-	
+
 	filter "configurations:Debug"
 		defines { "DEBUG", "_DEBUG" }
 		symbols "on"
@@ -139,9 +141,9 @@ project "otfccdump"
 	language "C"
 	cbuildoptions()
 	targetdir "bin/%{cfg.buildcfg}-%{cfg.platform}"
-	
+
 	links { "libotfcc", "deps" }
-	
+
 	files {
 		"src/**.c",
 		"src/**.h"
@@ -156,9 +158,9 @@ project "otfccbuild"
 	language "C"
 	cbuildoptions()
 	targetdir "bin/%{cfg.buildcfg}-%{cfg.platform}"
-	
+
 	links { "libotfcc", "deps" }
-	
+
 	files {
 		"src/**.c",
 		"src/**.h"

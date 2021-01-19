@@ -787,7 +787,7 @@ void cff_parseOutline(uint8_t *data, uint32_t len, cff_Index gsubr, cff_Index ls
 					case op_index: {
 						CHECK_STACK_TOP(op_index, 2);
 						uint8_t n = stack->index - 1;
-						uint8_t j = n - 1 - (uint8_t)(stack->stack[n].d) % n;
+						uint8_t j = n - 1 - (uint8_t)(int64_t)(stack->stack[n].d) % n;
 						stack->stack[n] = stack->stack[j];
 						break;
 					}
@@ -812,7 +812,7 @@ void cff_parseOutline(uint8_t *data, uint32_t len, cff_Index gsubr, cff_Index ls
 						return;
 					case op_callsubr: {
 						CHECK_STACK_TOP(op_callsubr, 1);
-						uint32_t subr = (uint32_t)stack->stack[--(stack->index)].d;
+						uint32_t subr = (uint32_t)(int64_t)stack->stack[--(stack->index)].d;
 						cff_parseOutline(lsubr.data + lsubr.offset[lsubr_bias + subr] - 1,
 						                 lsubr.offset[lsubr_bias + subr + 1] -
 						                     lsubr.offset[lsubr_bias + subr],
@@ -821,7 +821,7 @@ void cff_parseOutline(uint8_t *data, uint32_t len, cff_Index gsubr, cff_Index ls
 					}
 					case op_callgsubr: {
 						CHECK_STACK_TOP(op_callgsubr, 1);
-						uint32_t subr = (uint32_t)stack->stack[--(stack->index)].d;
+						uint32_t subr = (uint32_t)(int64_t)stack->stack[--(stack->index)].d;
 						cff_parseOutline(gsubr.data + gsubr.offset[gsubr_bias + subr] - 1,
 						                 gsubr.offset[gsubr_bias + subr + 1] -
 						                     gsubr.offset[gsubr_bias + subr],

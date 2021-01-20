@@ -51,13 +51,13 @@ caryll_Buffer *otfcc_buildHmtx(const table_hmtx *hmtx, glyphid_t count_a, glyphi
 	if (!hmtx) return buf;
 	if (hmtx->metrics) {
 		for (glyphid_t j = 0; j < count_a; j++) {
-			bufwrite16b(buf, hmtx->metrics[j].advanceWidth);
-			bufwrite16b(buf, hmtx->metrics[j].lsb);
+			bufwrite16b(buf, (int64_t)hmtx->metrics[j].advanceWidth);
+			bufwrite16b(buf, (int64_t)hmtx->metrics[j].lsb);
 		}
 	}
 	if (hmtx->leftSideBearing) {
 		for (glyphid_t j = 0; j < count_k; j++) {
-			bufwrite16b(buf, hmtx->leftSideBearing[j]);
+			bufwrite16b(buf, (int64_t)hmtx->leftSideBearing[j]);
 		}
 	}
 	return buf;

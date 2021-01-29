@@ -20,7 +20,7 @@ static void otfcc_read_packets(otfcc_SplineFontContainer *font, FILE *file) {
 			NEW(font->packets[count].pieces[i].data, font->packets[count].pieces[i].length);
 		}
 
-		for (uint32_t i = 0; i < font->packets[0].numTables; i++) {
+		for (uint32_t i = 0; i < font->packets[count].numTables; i++) {
 			(void)fseek(file, font->packets[count].pieces[i].offset, SEEK_SET);
 			(void)fread(font->packets[count].pieces[i].data, font->packets[count].pieces[i].length,
 			            1, file);

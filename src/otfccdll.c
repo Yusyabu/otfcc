@@ -5,7 +5,7 @@
 #ifdef _WIN32
 #define OTFCC_DLL_EXPORT __declspec(dllexport)
 #else
-#define OTFCC_DLL_EXPORT
+#define OTFCC_DLL_EXPORT __attribute__((visibility("default")))
 #endif
 
 OTFCC_DLL_EXPORT caryll_Buffer *otfccbuild_json_otf(uint32_t inlen, const char *injson, uint8_t olevel,

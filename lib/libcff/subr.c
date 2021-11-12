@@ -592,17 +592,12 @@ void cff_ilGraphToBuffers(cff_SubrGraph *g, caryll_Buffer **s, caryll_Buffer **g
 	uint32_t maxSubroutines = cff_numberSubroutines(g);
 	logProgress("[libcff] Total %d subroutines extracted.", maxSubroutines);
 	uint32_t maxLSubrs = maxSubroutines;
+	// XXX: GSubrs cannot callsubrs
+	//      But we currently cannot handle this correctly
+	//      So we just disable GSubrs
 	uint32_t maxGSubrs = 0;
-	{
-		// balance
-		if (maxLSubrs > type2_max_subrs) {
-			maxLSubrs = type2_max_subrs;
-			maxGSubrs = maxSubroutines - maxLSubrs;
-		}
-		if (maxGSubrs > type2_max_subrs) { maxGSubrs = type2_max_subrs; }
-		uint32_t total = maxLSubrs + maxGSubrs;
-		maxLSubrs = total / 2;
-		maxGSubrs = total - maxLSubrs;
+	if (maxLSubrs > type2_max_subrs) {
+		maxLSubrs = type2_max_subrs;
 	}
 	caryll_Buffer *charStrings, *gsubrs, *lsubrs;
 	NEW(charStrings, g->totalCharStrings + 1);
